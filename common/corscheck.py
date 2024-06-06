@@ -63,7 +63,7 @@ class CORSCheck:
 
         except Exception as e:
             resp = None
-        return resp
+        return (resp,headers)
 
     def get_resp_headers(self, resp):
         if resp == None:
@@ -73,7 +73,7 @@ class CORSCheck:
         return resp_headers
 
     def check_cors_policy(self, test_module_name,test_origin,test_url):
-        resp = self.send_req(self.url, test_origin)
+        resp,req_headers = self.send_req(self.url, test_origin)
         resp_headers = self.get_resp_headers(resp)
         status_code = resp.status_code if resp is not None else None
 
@@ -101,7 +101,9 @@ class CORSCheck:
                 "type": test_module_name,
                 "credentials": credentials,
                 "origin": test_origin,
-                "status_code" : status_code
+                "status_code" : status_code,
+                "req_headers":req_headers,
+                "resp_headers":resp_headers
             }
         return msg
 
